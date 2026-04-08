@@ -159,9 +159,36 @@ volumeSlider.addEventListener("input", () => {
 });
 
 // =========================
-// 📱 Resize Support
+// ⛶ Fullscreen Support
 // =========================
-window.addEventListener("resize", () => {
+const fullscreenButton = document.getElementById("fullscreen");
+
+function setCanvasSize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+}
+
+function updateFullscreenButton() {
+  fullscreenButton.textContent = document.fullscreenElement ? "Exit Fullscreen" : "Fullscreen";
+}
+
+async function toggleFullscreen() {
+  if (document.fullscreenElement) {
+    await document.exitFullscreen();
+  } else {
+    await document.documentElement.requestFullscreen();
+  }
+}
+
+fullscreenButton.addEventListener("click", toggleFullscreen);
+document.addEventListener("fullscreenchange", () => {
+  updateFullscreenButton();
+  setCanvasSize();
 });
+
+// =========================
+// 📱 Resize Support
+// =========================
+window.addEventListener("resize", setCanvasSize);
+
+setCanvasSize();
